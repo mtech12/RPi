@@ -14,6 +14,8 @@ QVariantMap Utilities::getConfig (const QString & file)
         in.close ();
     }
 
+    qDebug() << contents;
+
     QJsonDocument doc = QJsonDocument::fromJson (contents.toUtf8 ());
     QJsonObject obj = doc.object ();
     return obj.toVariantMap ();

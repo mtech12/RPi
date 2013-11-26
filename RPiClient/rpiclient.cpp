@@ -8,7 +8,7 @@ RPiClient::RPiClient(QObject *parent) :
     m_cfg = Utilities::getConfig ("config.mts");
 
     m_ip = new ImageProcessor ();
-    m_client = new TCPClient ("192.168.1.31");
+    m_client = new TCPClient (m_cfg[SERVER_IP].toString ());
     m_server = new TCPServer ();
     m_cp = new CommandParser ();
     m_dataPro = new DataProtocol ();
