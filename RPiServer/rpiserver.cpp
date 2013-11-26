@@ -4,6 +4,7 @@ RPiServer::RPiServer(QObject *parent) :
     QObject(parent)
 {
     m_cfg = Utilities::getConfig ("config.mts");
+    qDebug() << m_cfg[IMAGE_INTERVAL].toString ();
 
     m_server = new TCPServer ();
     m_ip = new ImageProcessor ();
