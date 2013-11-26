@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-INCLUDEPATH += /home/ubuntu/RPi/MT500_lib
+INCLUDEPATH += ../MT500_lib/
 
 QT       += core \
             gui \
