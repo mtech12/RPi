@@ -5,15 +5,11 @@ RPiServer::RPiServer(QObject *parent) :
 {
     m_cfg = Utilities::getConfig ("config.mts");
 
-    qDebug() << m_cfg[DEVICE_ID].toString ();
-    qDebug() << m_cfg[DEVICE_LABEL].toString ();
-    qDebug() << m_cfg[IMAGE_INTERVAL].toInt ();
-
     m_server = new TCPServer ();
     m_ip = new ImageProcessor ();
     m_cmdTimer = new QTimer ();
     m_dataPro = new DataProtocol ();
-    m_client = new TCPClient ("192.168.1.78");
+    m_client = new TCPClient (m_cfg[CLIENT_IP].toString ());
     m_cp = new CommandParser ();
 
     connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
@@ -42,7 +38,7 @@ void RPiServer::slotSendCommand ()
 void RPiServer::slotRecvImage()
 {
     qDebug() << "Saving Image!";
-    m_ip->saveImage(m_dataPro->getData (), "/home/administrator/Desktop/pics/");
+    m_ip->saveImage(m_dataPro->getData (), m_cfg[IMAGE_DIRECTORY].toString ());
 }
 
 void RPiServer::slotSendTime ()
