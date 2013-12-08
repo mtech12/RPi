@@ -18,6 +18,8 @@ signals:
     void sigRecvImage ();
     void sigSendTime ();
     void sigRecvTime ();
+    void sigResend ();
+    void sigReboot ();
 
 public slots:
 

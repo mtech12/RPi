@@ -19,6 +19,12 @@ void CommandParser::parseCommand (unsigned char command) {
     case TIME_RESPONSE:
         emit sigRecvTime ();
         break;
+    case RESEND:
+        emit sigResend ();
+        break;
+    case REBOOT:
+        emit sigReboot ();
+        break;
     default:
         break;
     }

@@ -14,6 +14,7 @@
 #define SERVER_IP		"serverip"
 #define CLIENT_IP		"clientip"
 #define IMAGE_DIRECTORY		"imageDirectory"
+#define RESEND_LIMIT            "resend"
 
 class Utilities : public QObject
 {
