@@ -23,11 +23,13 @@ signals:
 
 public slots:
 
-    void slot_takePicture ();
-    void slot_sendPicture ();
-    void slot_gotData (QByteArray);
-    void slot_requestTime ();
-    void slot_gotTime ();
+    void slotTakePicture ();
+    void slotSendPicture ();
+    void slotGotData (QByteArray);
+    void slotRequestTime ();
+    void slotGotTime ();
+    void slotResend ();
+    void slotRequestResend ();
 
 private:
 

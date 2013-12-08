@@ -13,16 +13,18 @@ RPiClient::RPiClient(QObject *parent) :
     m_cp = new CommandParser ();
     m_dataPro = new DataProtocol ();
 
-    connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slot_gotData(QByteArray)));
-    connect(m_ip, SIGNAL(sig_picTaken ()), this, SLOT(slot_sendPicture()));
-    connect(m_cp, SIGNAL (sigSendImage ()), this, SLOT(slot_takePicture()));
-    connect(m_cp, SIGNAL (sigRecvTime ()), this, SLOT(slot_gotTime()));
+    connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
+    connect(m_ip, SIGNAL(sig_picTaken ()), this, SLOT(slotSendPicture()));
+    connect(m_cp, SIGNAL (sigSendImage ()), this, SLOT(slotTakePicture()));
+    connect(m_cp, SIGNAL (sigRecvTime ()), this, SLOT(slotGotTime()));
+    connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
+    connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
 
-    slot_requestTime ();
+    slotRequestTime ();
     qDebug() << "Time: " << Utilities::getTime (m_cfg[TIMEZONE].toDouble (), "MM/dd/yyyy hh:mm:ss");
 }
 
-void RPiClient::slot_sendPicture()
+void RPiClient::slotSendPicture()
 {
     qDebug() << "Sending picture!";
     QString time = Utilities::getTime (m_cfg[TIMEZONE].toDouble (), "yyyyMMddThh:mm:ss");
@@ -30,28 +32,45 @@ void RPiClient::slot_sendPicture()
     m_client->write(toSend);
 }
 
-void RPiClient::slot_takePicture()
+void RPiClient::slotTakePicture()
 {
     qDebug() << "Taking picture!";
     m_ip->takePicture();
 }
 
-void RPiClient::slot_gotData(QByteArray data)
+void RPiClient::slotGotData(QByteArray data)
 {
     qDebug() << "Got data!";
     m_cp->parseCommand (m_dataPro->decode (data));
 }
 
-void RPiClient::slot_requestTime ()
+void RPiClient::slotRequestTime ()
 {
     qDebug() << "Requesting time";
     QByteArray toSend = m_dataPro->encode(NULL, SYNC_TIME); 
     m_client->write(toSend);
 }
 
-void RPiClient::slot_gotTime ()
+void RPiClient::slotGotTime ()
 {
     qDebug() << "Got time!";
     QString cmd = QString("date %1").arg(m_dataPro->getData ().data ());
     system (cmd.toStdString ().c_str ());
+}
+
+void RPiClient::slotRequestResend ()
+{
+    qDebug () << "CRC Mismatch --- requesting resend of last message";
+    m_client->write (m_dataPro->encode (NULL, RESEND));
+}
+
+void RPiClient::slotResend ()
+{
+    static int retries = 0;
+    if( retries < m_cfg[RESEND_LIMIT].toInt () ) {
+        qDebug() << "Resending previous message...";
+        m_client->resend ();
+        retries++;
+    }
+    else retries = 0;
 }
