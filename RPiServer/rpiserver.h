@@ -27,6 +27,8 @@ public slots:
     void slotSendCommand ();
     void slotRecvImage ();
     void slotSendTime ();
+    void slotRequestResend ();
+    void slotResend ();
 
 private:
 

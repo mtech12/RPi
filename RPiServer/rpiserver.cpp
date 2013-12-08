@@ -15,8 +15,13 @@ RPiServer::RPiServer(QObject *parent) :
 
     connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
     connect(m_cmdTimer, SIGNAL(timeout()), this, SLOT(slotSendCommand ()));
+    //
+    // Slots to respond to Command Parser signals
+    //
     connect(m_cp, SIGNAL(sigRecvImage()), this, SLOT(slotRecvImage ()));
     connect(m_cp, SIGNAL(sigSendTime()), this, SLOT(slotSendTime ()));
+    connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
+    connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
 
     qDebug() << "Starting timer...";
     m_cmdTimer->start (10000);
@@ -48,4 +53,21 @@ void RPiServer::slotSendTime ()
     QDateTime now = QDateTime::currentDateTimeUtc ();
     QByteArray toSend = now.toString("MMddhhmmyyyy.ss").toStdString ().c_str ();
     m_client->write (m_dataPro->encode (toSend, TIME_RESPONSE));
+}
+
+void RPiServer::slotRequestResend ()
+{
+    qDebug () << "CRC Mismatch --- requesting resend of last message";
+    m_client->write (m_dataPro->encode (NULL, RESEND));
+}
+
+void RPiServer::slotResend ()
+{
+    static int retries = 0;
+    if( retries < m_cfg[RESEND_LIMIT].toInt () ) {
+        qDebug() << "Resending previous message...";
+        m_client->resend ();
+        retries++;
+    }
+    else retries = 0;
 }
