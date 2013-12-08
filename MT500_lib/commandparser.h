@@ -20,6 +20,7 @@ signals:
     void sigRecvTime ();
     void sigResend ();
     void sigReboot ();
+    void sigCRCMismatch ();
 
 public slots:
 

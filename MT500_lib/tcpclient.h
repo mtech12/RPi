@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QByteArray>
 #include <QDebug>
 
 class TCPClient : public QObject
@@ -15,6 +16,8 @@ public:
 
     void write(QByteArray toWrite);
 
+    void resend ();
+
 signals:
 
 public slots:
@@ -24,6 +27,7 @@ private:
     QTcpSocket *m_connection;
     quint16 m_port;
     QString m_address;
+    QByteArray m_previousMessage;
 
 };
 

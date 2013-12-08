@@ -65,6 +65,6 @@ void ImageProcessor::takePicture(QString savePath)
 
 void ImageProcessor::slot_processFinished (int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "PIc taken!!!!";
+    qDebug() << "Pic taken!!!!";
     emit sig_picTaken ();
 }
