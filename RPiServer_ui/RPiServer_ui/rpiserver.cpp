@@ -1,20 +1,21 @@
 #include "rpiserver.h"
+#include "ui_rpiserver.h"
 
-RPiServer::RPiServer(QObject *parent) :
-    QObject(parent)
+RPiServer::RPiServer(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::RPiServer)
 {
+    ui->setupUi(this);
     m_cfg = Utilities::getConfig ("config.mts");
     qDebug() << m_cfg[IMAGE_INTERVAL].toString ();
 
     m_server = new TCPServer ();
     m_ip = new ImageProcessor ();
-    m_cmdTimer = new QTimer ();
     m_dataPro = new DataProtocol ();
     m_client = new TCPClient (m_cfg[CLIENT_IP].toString ());
     m_cp = new CommandParser ();
 
     connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
-    connect(m_cmdTimer, SIGNAL(timeout()), this, SLOT(slotSendCommand ()));
     //
     // Slots to respond to Command Parser signals
     //
@@ -22,10 +23,12 @@ RPiServer::RPiServer(QObject *parent) :
     connect(m_cp, SIGNAL(sigSendTime()), this, SLOT(slotSendTime ()));
     connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
-    connect(m_cp, SIGNAL(sigRecvConfig()), this, SLOT(slotRecvConfg ()));
+    connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfig ()));
+}
 
-    qDebug() << "Starting timer...";
-    m_cmdTimer->start (10000);
+RPiServer::~RPiServer()
+{
+    delete ui;
 }
 
 void RPiServer::slotGotData (QByteArray data)
@@ -34,12 +37,11 @@ void RPiServer::slotGotData (QByteArray data)
     m_cp->parseCommand (m_dataPro->decode (data));
 }
 
-void RPiServer::slotSendCommand ()
+void RPiServer::slotSendCommand (unsigned char command)
 {
     qDebug() << "Sending message...";
-    QByteArray msg = m_dataPro->encode(NULL, SEND_IMAGE); 
+    QByteArray msg = m_dataPro->encode(NULL, command);
     m_client->write (msg);
-    m_cmdTimer->start(1000 * 60 * m_cfg[IMAGE_INTERVAL].toInt ());
 }
 
 void RPiServer::slotRecvImage ()
@@ -79,7 +81,7 @@ void RPiServer::slotResend ()
 
 void RPiServer::slotRequestConfig ()
 {
-    QByteArray msg = m_dataPro->encode(NULL, SEND_CFG); 
+    QByteArray msg = m_dataPro->encode(NULL, SEND_CFG);
     m_client->write (msg);
 }
 
@@ -91,4 +93,9 @@ void RPiServer::slotRecvConfig ()
     // Display it?
     //
     QString cfg = m_dataPro->getData ().data ();
+}
+
+void RPiServer::on_sendButton_clicked()
+{
+    slotSendCommand (ui->cmdEdit->text().toInt());
 }
