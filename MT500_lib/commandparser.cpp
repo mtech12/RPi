@@ -25,6 +25,12 @@ void CommandParser::parseCommand (unsigned char command) {
     case REBOOT:
         emit sigReboot ();
         break;
+    case SEND_CFG:
+        emit sigSendCfg ();
+        break;
+    case CFG_RESPONSE:
+        emit sigRecvCfg ();
+        break;
     case CRC_MISMATCH:
         emit sigCRCMismatch ();
         break;

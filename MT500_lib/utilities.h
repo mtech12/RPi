@@ -23,6 +23,7 @@ public:
     Utilities(QObject *parent = 0);
     static QVariantMap getConfig (const QString & file);
     static QString getTime (const double & offset, const QString & format);
+    static QString encodeCfg (const QVariantMap & config);
 
 signals:
 

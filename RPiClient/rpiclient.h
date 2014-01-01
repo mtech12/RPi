@@ -30,6 +30,7 @@ public slots:
     void slotGotTime ();
     void slotResend ();
     void slotRequestResend ();
+    void slotSendConfig ();
 
 private:
 

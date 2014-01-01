@@ -22,12 +22,13 @@ RPiServer::RPiServer(QObject *parent) :
     connect(m_cp, SIGNAL(sigSendTime()), this, SLOT(slotSendTime ()));
     connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
+    connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfg ()));
 
     qDebug() << "Starting timer...";
     m_cmdTimer->start (10000);
 }
 
-void RPiServer::slotGotData(QByteArray data)
+void RPiServer::slotGotData (QByteArray data)
 {
     qDebug() << "Got Data!";
     m_cp->parseCommand (m_dataPro->decode (data));
@@ -41,7 +42,7 @@ void RPiServer::slotSendCommand ()
     m_cmdTimer->start(1000 * 60 * m_cfg[IMAGE_INTERVAL].toInt ());
 }
 
-void RPiServer::slotRecvImage()
+void RPiServer::slotRecvImage ()
 {
     qDebug() << "Saving Image!";
     m_ip->saveImage(m_dataPro->getData (), m_cfg[IMAGE_DIRECTORY].toString ());
@@ -63,6 +64,10 @@ void RPiServer::slotRequestResend ()
 
 void RPiServer::slotResend ()
 {
+    //
+    // TODO
+    // If retries are exceeded how do we reset it?
+    //
     static int retries = 0;
     if( retries < m_cfg[RESEND_LIMIT].toInt () ) {
         qDebug() << "Resending previous message...";
@@ -70,4 +75,20 @@ void RPiServer::slotResend ()
         retries++;
     }
     else retries = 0;
+}
+
+void RPiServer::slotRequestConfig ()
+{
+    QByteArray msg = m_dataPro->encode(NULL, SEND_CFG); 
+    m_client->write (msg);
+}
+
+void RPiServer::slotRecvConfig ()
+{
+    //
+    // TODO
+    // What do we want to do when we receive the config file?
+    // Display it?
+    //
+    QString cfg = m_dataPro->getData ().data ();
 }

@@ -19,6 +19,7 @@ RPiClient::RPiClient(QObject *parent) :
     connect(m_cp, SIGNAL (sigRecvTime ()), this, SLOT(slotGotTime()));
     connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
+    connect(m_cp, SIGNAL(sigSendCfg()), this, SLOT(slotSendConfig ()));
 
     slotRequestTime ();
     qDebug() << "Time: " << Utilities::getTime (m_cfg[TIMEZONE].toDouble (), "MM/dd/yyyy hh:mm:ss");
@@ -66,6 +67,10 @@ void RPiClient::slotRequestResend ()
 
 void RPiClient::slotResend ()
 {
+    //
+    // TODO
+    // If retries are exceeded how do we reset it?
+    //
     static int retries = 0;
     if( retries < m_cfg[RESEND_LIMIT].toInt () ) {
         qDebug() << "Resending previous message...";
@@ -73,4 +78,10 @@ void RPiClient::slotResend ()
         retries++;
     }
     else retries = 0;
+}
+
+void RPiClient::slotSendConfig ()
+{
+    QString configStr = Utilities::encodeCfg (m_cfg);
+    m_client->write (m_dataPro->encode (configStr.toUtf8 (), CFG_RESPONSE)); 
 }

@@ -27,3 +27,10 @@ QString Utilities::getTime (const double & offset, const QString & format)
     QDateTime newTime = QDateTime::fromTime_t (unixTimestamp);
     return newTime.toString (format);
 }
+
+QString Utilities::encodeCfg (const QVariantMap & config)
+{
+    QJsonObject obj = QJsonObject::fromVariantMap (config);
+    QJsonDocument doc (obj);
+    return doc.toJson ().data ();
+}
