@@ -20,6 +20,7 @@ RPiClient::RPiClient(QObject *parent) :
     connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
     connect(m_cp, SIGNAL(sigSendCfg()), this, SLOT(slotSendConfig ()));
+    connect(m_cp, SIGNAL(sigReboot()), this, SLOT(slotReboot ()));
 
     slotRequestTime ();
     qDebug() << "Time: " << Utilities::getTime (m_cfg[TIMEZONE].toDouble (), "MM/dd/yyyy hh:mm:ss");
@@ -84,4 +85,10 @@ void RPiClient::slotSendConfig ()
 {
     QString configStr = Utilities::encodeCfg (m_cfg);
     m_client->write (m_dataPro->encode (configStr.toUtf8 (), CFG_RESPONSE)); 
+}
+
+void RPiClient::slotReboot ()
+{
+    qDebug() << "Rebooting...";
+    system ("reboot");
 }

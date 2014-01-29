@@ -31,6 +31,7 @@ public slots:
     void slotResend ();
     void slotRequestResend ();
     void slotSendConfig ();
+    void slotReboot ();
 
 private:
 
