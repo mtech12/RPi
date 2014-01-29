@@ -93,6 +93,7 @@ void RPiServer::slotRecvConfig ()
     // Display it?
     //
     QString cfg = m_dataPro->getData ().data ();
+    ui->responseBrowser->clear();
     ui->responseBrowser->append(cfg);
 }
 
