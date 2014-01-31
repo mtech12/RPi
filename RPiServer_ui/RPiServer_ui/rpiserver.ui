@@ -69,7 +69,10 @@
      </item>
     </layout>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QFrame" name="frame">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -78,8 +81,8 @@
       <height>171</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Common Commands</string>
+    <property name="mouseTracking">
+     <bool>false</bool>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
@@ -107,8 +110,30 @@
       </item>
      </layout>
     </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>151</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Common Commands</string>
+     </property>
+    </widget>
+    <zorder>verticalLayoutWidget</zorder>
+    <zorder>frame</zorder>
+    <zorder>label</zorder>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QFrame" name="frame_2">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -116,9 +141,6 @@
       <width>231</width>
       <height>51</height>
      </rect>
-    </property>
-    <property name="title">
-     <string>Custom Command</string>
     </property>
     <widget class="QWidget" name="horizontalLayoutWidget_2">
      <property name="geometry">
@@ -142,8 +164,25 @@
       </item>
      </layout>
     </widget>
-    <zorder>imageLbl</zorder>
-    <zorder>horizontalLayoutWidget_2</zorder>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>151</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Custom Command</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
@@ -200,6 +239,12 @@
      <enum>QFrame::Raised</enum>
     </property>
    </widget>
+   <zorder>frame</zorder>
+   <zorder>imageLbl</zorder>
+   <zorder>horizontalLayoutWidget</zorder>
+   <zorder>frame_2</zorder>
+   <zorder>frame</zorder>
+   <zorder>frame_2</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

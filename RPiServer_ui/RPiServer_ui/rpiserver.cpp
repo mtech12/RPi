@@ -32,7 +32,7 @@ RPiServer::RPiServer(QWidget *parent) :
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
     connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfig ()));
 
-    slotUpdateImageList ("");
+    slotUpdateImageList ("constructor");
 }
 
 RPiServer::~RPiServer()
@@ -125,6 +125,7 @@ void RPiServer::slotUpdateImageList(QString fileChanged)
     filters << "*.jpg";
     QDir imageDir = QDir(m_cfg[IMAGE_DIRECTORY].toString ());
     m_imageList = imageDir.entryList(filters, QDir::Files, QDir::Time);
+    qDebug() << QString("Size of image list: %1").arg(m_imageList.size());
 }
 
 void RPiServer::on_prevButton_clicked()
