@@ -10,6 +10,7 @@ RPiServer::RPiServer(QWidget *parent) :
     ui->setupUi(this);
 
     m_imageIndex = -1;
+    m_slideshowRunning = false;
     m_cfg = Utilities::getConfig ("config.mts");
 
     m_server = new TCPServer ();
@@ -17,12 +18,16 @@ RPiServer::RPiServer(QWidget *parent) :
     m_dataPro = new DataProtocol ();
     m_client = new TCPClient (m_cfg[CLIENT_IP].toString ());
     m_cp = new CommandParser ();
-
     m_imageWatcher = new QFileSystemWatcher();
+    m_slideshowTimer = new QTimer ();
+
+    connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
+
     m_imageWatcher->addPath(m_cfg[IMAGE_DIRECTORY].toString());
     connect(m_imageWatcher, SIGNAL(directoryChanged(QString)), this, SLOT(slotUpdateImageList(QString)));
 
-    connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
+    connect(m_slideshowTimer, SIGNAL(timeout()), this, SLOT(slotSlideshow()));
+
     //
     // Slots to respond to Command Parser signals
     //
@@ -159,4 +164,31 @@ void RPiServer::on_takePicture_clicked()
 void RPiServer::on_getConfig_clicked()
 {
     slotSendCommand (6);
+}
+
+void RPiServer::on_slideshowButton_clicked()
+{
+    if(m_imageList.size() > 0) {
+        m_slideshowRunning = !m_slideshowRunning;
+        if(m_slideshowRunning == true) {
+            ui->slideshowButton->setText("Stop");
+            m_imageIndex = 0;
+            slotSetImage(m_imageList.at(0));
+            m_slideshowTimer->start(SLIDESHOW_INTERVAL_MSEC);
+        }
+        else {
+            ui->slideshowButton->setText("Slideshow");
+            m_slideshowTimer->stop();
+        }
+    }
+}
+
+void RPiServer::slotSlideshow()
+{
+    m_imageIndex++;
+    if (m_imageIndex == m_imageList.size()) {
+        m_slideshowRunning = !m_slideshowRunning;
+        ui->slideshowButton->setText("Slideshow");
+    }
+    else slotSetImage(m_imageList.at(m_imageIndex));
 }

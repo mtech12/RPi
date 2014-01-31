@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QStringList>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 #include "tcpserver.h"
 #include "imageprocessor.h"
@@ -15,6 +16,8 @@
 #include "commandparser.h"
 #include "utilities.h"
 #include "commands.h"
+
+#define SLIDESHOW_INTERVAL_MSEC 2500
 
 namespace Ui {
 class RPiServer;
@@ -42,17 +45,15 @@ public slots:
     void slotRecvConfig ();
     void slotSetImage (const QString& image);
     void slotUpdateImageList (QString fileChanged);
+    void slotSlideshow ();
 
 private slots:
     void on_sendButton_clicked();
-
     void on_prevButton_clicked();
-
     void on_nextButton_clicked();
-
     void on_takePicture_clicked();
-
     void on_getConfig_clicked();
+    void on_slideshowButton_clicked();
 
 private:
 
@@ -66,6 +67,8 @@ private:
     QStringList m_imageList;
     QFileSystemWatcher *m_imageWatcher;
     int m_imageIndex;
+    bool m_slideshowRunning;
+    QTimer *m_slideshowTimer;
 };
 
 #endif // RPISERVER_H
