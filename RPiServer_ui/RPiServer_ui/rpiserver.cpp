@@ -8,14 +8,19 @@ RPiServer::RPiServer(QWidget *parent) :
     ui(new Ui::RPiServer)
 {
     ui->setupUi(this);
+
+    m_imageIndex = 0;
     m_cfg = Utilities::getConfig ("config.mts");
-    qDebug() << m_cfg[IMAGE_INTERVAL].toString ();
 
     m_server = new TCPServer ();
     m_ip = new ImageProcessor ();
     m_dataPro = new DataProtocol ();
     m_client = new TCPClient (m_cfg[CLIENT_IP].toString ());
     m_cp = new CommandParser ();
+
+    m_imageWatcher = new QFileSystemWatcher();
+    m_imageWatcher->addPath(m_cfg[IMAGE_DIRECTORY].toString());
+    connect(m_imageWatcher, SIGNAL(directoryChanged(QString)), this, SLOT(slotUpdateImageList(QString)));
 
     connect(m_server, SIGNAL(sigGotData(QByteArray)), this, SLOT(slotGotData(QByteArray)));
     //
@@ -27,10 +32,7 @@ RPiServer::RPiServer(QWidget *parent) :
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
     connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfig ()));
 
-
-    QPixmap mypix ("/home/ubuntu/Desktop/emory");
-    mypix.scaledToHeight(251);
-    ui->testLbl->setPixmap(mypix);
+    slotUpdateImageList ("");
 }
 
 RPiServer::~RPiServer()
@@ -106,5 +108,49 @@ void RPiServer::slotRecvConfig ()
 
 void RPiServer::on_sendButton_clicked()
 {
-    slotSendCommand (ui->cmdEdit->text().toInt());
+    if(ui->cmdEdit->text() != "") slotSendCommand (ui->cmdEdit->text().toInt());
+}
+
+void RPiServer::slotSetImage(const QString &image)
+{
+    QPixmap mypix (image);
+    mypix = mypix.scaled (250, 250);
+    ui->imageLbl->setPixmap(mypix);
+}
+
+void RPiServer::slotUpdateImageList(QString fileChanged)
+{
+    qDebug() << QString("File %1 changed.").arg(fileChanged);
+    QStringList filters;
+    filters << "*.jpg";
+    QDir imageDir = QDir(m_cfg[IMAGE_DIRECTORY].toString ());
+    m_imageList = imageDir.entryList(filters, QDir::Files, QDir::Time);
+}
+
+void RPiServer::on_prevButton_clicked()
+{
+    if(m_imageList.size() > 0) {
+        m_imageIndex--;
+        if (m_imageIndex < 0) m_imageIndex = 0;
+        slotSetImage(m_imageList.at(m_imageIndex));
+    }
+}
+
+void RPiServer::on_nextButton_clicked()
+{
+    if(m_imageList.size() > 0) {
+        m_imageIndex++;
+        if (m_imageIndex >= m_imageList.size()) m_imageIndex = m_imageList.size() - 1;
+        slotSetImage(m_imageList.at(m_imageIndex));
+    }
+}
+
+void RPiServer::on_takePicture_clicked()
+{
+    slotSendCommand (0);
+}
+
+void RPiServer::on_getConfig_clicked()
+{
+    slotSendCommand (6);
 }

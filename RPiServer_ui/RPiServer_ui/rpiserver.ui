@@ -6,76 +6,198 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
-    <height>549</height>
+    <width>607</width>
+    <height>662</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>RPiServer</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="imageLbl">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Command:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="cmdEdit">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>30</y>
-      <width>113</width>
-      <height>23</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="responseBrowser">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>30</y>
-      <width>311</width>
-      <height>231</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="sendButton">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>60</y>
-      <width>80</width>
-      <height>23</height>
+      <x>162</x>
+      <y>360</y>
+      <width>250</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="text">
-     <string>Send</string>
+     <string>No Images</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="testLbl">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>620</y>
+      <width>252</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="prevButton">
+       <property name="text">
+        <string>Prev</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Slideshow</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="nextButton">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>280</y>
-      <width>511</width>
+      <y>80</y>
+      <width>221</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Common Commands</string>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>131</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="takePicture">
+        <property name="text">
+         <string>Take Picture</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="getConfig">
+        <property name="text">
+         <string>Get Configuration</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>260</y>
+      <width>231</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Custom Command</string>
+    </property>
+    <widget class="QWidget" name="horizontalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>20</y>
+       <width>231</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLineEdit" name="cmdEdit"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sendButton">
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <zorder>imageLbl</zorder>
+    <zorder>horizontalLayoutWidget_2</zorder>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>586</width>
       <height>251</height>
      </rect>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>10</y>
+       <width>291</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Response Browser</string>
+     </property>
+     <widget class="QTextBrowser" name="responseBrowser">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>21</y>
+        <width>291</width>
+        <height>210</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="frame_2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>350</y>
+      <width>271</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
     </property>
    </widget>
   </widget>

@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QDebug>
+#include <QDir>
+#include <QStringList>
+#include <QFileSystemWatcher>
 
 #include "tcpserver.h"
 #include "imageprocessor.h"
@@ -37,9 +40,19 @@ public slots:
     void slotResend ();
     void slotRequestConfig ();
     void slotRecvConfig ();
+    void slotSetImage (const QString& image);
+    void slotUpdateImageList (QString fileChanged);
 
 private slots:
     void on_sendButton_clicked();
+
+    void on_prevButton_clicked();
+
+    void on_nextButton_clicked();
+
+    void on_takePicture_clicked();
+
+    void on_getConfig_clicked();
 
 private:
 
@@ -50,6 +63,9 @@ private:
     TCPClient *m_client;
     DataProtocol *m_dataPro;
     CommandParser *m_cp;
+    QStringList m_imageList;
+    QFileSystemWatcher *m_imageWatcher;
+    int m_imageIndex;
 };
 
 #endif // RPISERVER_H

@@ -17,7 +17,7 @@ bool ImageProcessor::saveImage(QByteArray data, QString savePath)
      * Create filename from timestamp
      *
      */
-    QString filename = savePath + id.data() + "_" + time.data();
+    QString filename = savePath + id.data() + "_" + time.data() + ".jpg";
     qDebug() << filename;
     data = data.right(data.size() - 20);
     /*
