@@ -1,5 +1,7 @@
 #include "rpiserver.h"
 #include "ui_rpiserver.h"
+#include <QPixmap>
+
 
 RPiServer::RPiServer(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +26,10 @@ RPiServer::RPiServer(QWidget *parent) :
     connect(m_cp, SIGNAL(sigCRCMismatch()), this, SLOT(slotRequestResend ()));
     connect(m_cp, SIGNAL(sigResend()), this, SLOT(slotResend ()));
     connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfig ()));
+
+
+    QPixmap mypix ("/home/ubuntu/Desktop/tux.png");
+    ui->testLbl->setPixmap(mypix);
 }
 
 RPiServer::~RPiServer()
