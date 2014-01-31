@@ -9,7 +9,7 @@ RPiServer::RPiServer(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_imageIndex = 0;
+    m_imageIndex = -1;
     m_cfg = Utilities::getConfig ("config.mts");
 
     m_server = new TCPServer ();
@@ -126,6 +126,10 @@ void RPiServer::slotUpdateImageList(QString fileChanged)
     filters << "*.jpg";
     QDir imageDir = QDir(m_cfg[IMAGE_DIRECTORY].toString ());
     m_imageList = imageDir.entryList(filters, QDir::Files, QDir::Time);
+    if (m_imageList.size() > 0 && m_imageIndex == -1) {
+        m_imageIndex = 0;
+        slotSetImage(m_imageList.at(0));
+    }
     qDebug() << QString("Size of image list: %1").arg(m_imageList.size());
 }
 
