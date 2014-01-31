@@ -188,6 +188,7 @@ void RPiServer::slotSlideshow()
 {
     m_imageIndex++;
     if (m_imageIndex == m_imageList.size()) {
+        m_imageIndex = m_imageList.size() - 1;
         m_slideshowTimer->stop();
         m_slideshowRunning = !m_slideshowRunning;
         ui->slideshowButton->setText("Slideshow");
