@@ -114,7 +114,7 @@ void RPiServer::on_sendButton_clicked()
 void RPiServer::slotSetImage(const QString &image)
 {
     qDebug() << QString("Setting image to %1").arg(image);
-    QPixmap mypix (image);
+    QPixmap mypix (QString("%1%2").arg(m_cfg[IMAGE_DIRECTORY].toString()).arg(image));
     mypix = mypix.scaled (250, 250);
     ui->imageLbl->setPixmap(mypix);
 }
