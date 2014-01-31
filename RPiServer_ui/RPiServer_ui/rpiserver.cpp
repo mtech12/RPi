@@ -28,7 +28,8 @@ RPiServer::RPiServer(QWidget *parent) :
     connect(m_cp, SIGNAL(sigRecvCfg()), this, SLOT(slotRecvConfig ()));
 
 
-    QPixmap mypix ("/home/ubuntu/Desktop/tux.png");
+    QPixmap mypix ("/home/ubuntu/Desktop/emory");
+    mypix.scaledToHeight(251);
     ui->testLbl->setPixmap(mypix);
 }
 
