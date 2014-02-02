@@ -8,6 +8,10 @@
 #include <QStringList>
 #include <QFileSystemWatcher>
 #include <QTimer>
+#include <QPixmap>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 
 #include "tcpserver.h"
 #include "imageprocessor.h"
@@ -54,6 +58,10 @@ private slots:
     void on_takePicture_clicked();
     void on_getConfig_clicked();
     void on_slideshowButton_clicked();
+
+    void on_browseButton_clicked();
+
+    void on_sendCfgButton_clicked();
 
 private:
 

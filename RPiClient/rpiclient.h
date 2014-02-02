@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTimer>
 #include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 #include "imageprocessor.h"
 #include "tcpclient.h"
@@ -32,6 +34,7 @@ public slots:
     void slotRequestResend ();
     void slotSendConfig ();
     void slotReboot ();
+    void slotRecvNewCfg ();
 
 private:
 

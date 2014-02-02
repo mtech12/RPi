@@ -23,6 +23,7 @@ signals:
     void sigSendCfg ();
     void sigRecvCfg ();
     void sigCRCMismatch ();
+    void sigNewCfg ();
 
 public slots:
 

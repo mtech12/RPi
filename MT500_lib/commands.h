@@ -9,6 +9,7 @@
 #define REBOOT                  0x05 // Command from server to client initiating a reboot --- Int (5)
 #define SEND_CFG	        0x06 // Command from server to client requesting the current configuration --- Int (6)
 #define CFG_RESPONSE            0x07 // Command from client to server with configuration in the data field --- Int (7)
+#define NEW_CFG                 0x08 // Command from server to client sending a new configuration file in the data field --- Int (8)
 #define CRC_MISMATCH            0xFF // Mismatch in CRC...returned from data protocol decode function --- Int (255)
 
 #endif // COMMANDS_H

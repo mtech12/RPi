@@ -1,7 +1,5 @@
 #include "rpiserver.h"
 #include "ui_rpiserver.h"
-#include <QPixmap>
-
 
 RPiServer::RPiServer(QWidget *parent) :
     QMainWindow(parent),
@@ -194,4 +192,25 @@ void RPiServer::slotSlideshow()
         ui->slideshowButton->setText("Slideshow");
     }
     else slotSetImage(m_imageList.at(m_imageIndex));
+}
+
+void RPiServer::on_browseButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", ".");
+    ui->configFile->setText(fileName);
+
+}
+
+void RPiServer::on_sendCfgButton_clicked()
+{
+    QString fileName = ui->configFile->text();
+    if (fileName != "") {
+        QFile file(fileName);
+        if (file.open (QIODevice::ReadOnly)) {
+            QString cfgFile = file.readAll().data();
+            qDebug() << cfgFile;
+            m_client->write (m_dataPro->encode (cfgFile.toUtf8(), NEW_CFG));
+            file.close ();
+        }
+    }
 }

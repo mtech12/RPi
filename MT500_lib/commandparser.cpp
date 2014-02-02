@@ -31,6 +31,9 @@ void CommandParser::parseCommand (unsigned char command) {
     case CFG_RESPONSE:
         emit sigRecvCfg ();
         break;
+    case NEW_CFG:
+        emit sigNewCfg ();
+        break;
     case CRC_MISMATCH:
         emit sigCRCMismatch ();
         break;
